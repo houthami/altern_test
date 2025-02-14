@@ -22,6 +22,17 @@ export class CartService {
     }
   }
 
+  cartTotal = computed(() => 
+    this._cartItems().reduce((acc, item) => 
+      acc + (item.price * (item.quantity || 1)), 0
+  ));
+
+  removeFromCart(productId: number) {
+    this._cartItems.update(items => 
+      items.filter(item => item.id !== productId)
+    );
+  }
+
   clearCart() {
     this._cartItems.set([]);
   }

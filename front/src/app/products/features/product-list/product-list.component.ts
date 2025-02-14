@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from "@angular/core";
+import { Component, ElementRef, OnInit, ViewChild, inject, signal } from "@angular/core";
 import { Product } from "app/products/data-access/product.model";
 import { ProductsService } from "app/products/data-access/products.service";
 import { ProductFormComponent } from "app/products/ui/product-form/product-form.component";
@@ -44,6 +44,7 @@ export class ProductListComponent implements OnInit {
   public isDescriptionExpanded = false;
   public currency = "MAD";
   private cartService = inject(CartService);
+  @ViewChild('gridContainer') gridContainer!: ElementRef<HTMLElement>;
 
   public readonly editedProduct = signal<Product>(emptyProduct);
 
@@ -55,6 +56,17 @@ export class ProductListComponent implements OnInit {
     this.isCreation = true;
     this.isDialogVisible = true;
     this.editedProduct.set(emptyProduct);
+  }
+
+  ngAfterViewInit() {
+    const grid = this.gridContainer.nativeElement;
+    
+    grid.addEventListener('wheel', (e: WheelEvent) => {
+      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+        e.preventDefault();
+        grid.scrollLeft += e.deltaY * 2;
+      }
+    }, { passive: false });
   }
 
   public toggleDescription() {

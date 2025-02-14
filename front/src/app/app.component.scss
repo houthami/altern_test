@@ -1,29 +1,36 @@
 .app-content {
-    overflow: hidden;
-    height: 100%;
+  overflow: hidden;
+  height: 100%;
 }
 
 .cart-badge-container {
-    position: relative;
+  position: relative;
+  margin-right: 2rem;
+  display: inline-block;
+  cursor: pointer;
+
+  ::ng-deep .cart-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    min-width: 1.5rem;
     margin-right: 2rem;
-    display: inline-block;
-    
-    ::ng-deep .cart-badge {
-        position: absolute;
-        top: -8px;
-        right: -8px;
-        min-width: 1.5rem;
-        margin-right: 2rem;
-        height: 1.5rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 50%;
-        font-size: 0.75rem;
-        transform: translate(25%, -25%);
-    }
+    height: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 0.75rem;
+    transform: translate(25%, -25%);
+  }
 }
 
 ::ng-deep .hidden .p-badge {
-    display: none;
-  }
+  display: none;
+}
+
+.disabled-cart {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}

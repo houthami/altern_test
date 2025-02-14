@@ -1,23 +1,28 @@
 <p-toolbar [style]="{ height: '100px' }">
   <div class="p-toolbar-group-start">
-    <img src="assets/icons/icon-72x72.png" alt="logo" />
+      <img src="assets/icons/icon-72x72.png" alt="logo" />
   </div>
   <div class="p-toolbar-group-center">
-    {{ title }}
+      {{ title }}
   </div>
   <div class="p-toolbar-group-end">
     <div class="flex align-items-center gap-3">
-      <!-- Add wrapper with relative positioning -->
-      <div class="cart-badge-container">
-        <i class="pi pi-shopping-cart" style="font-size: 2rem"></i>
-        <p-badge
-          [value]="cartCount()"
-          severity="danger"
+      <div 
+      [class.disabled-cart]="cartCount() === 0"
+      (click)="cartCount() > 0 && cartDropdown.toggle($event)" 
+      class="cart-badge-container"
+    >
+        <!-- Cart badge and icon -->        
+         <i class="pi pi-shopping-cart" style="font-size: 2rem"></i>
+        <p-badge 
+          [value]="cartService.cartCount()" 
+          severity="danger" 
           styleClass="cart-badge"
-          [class.hidden]="cartCount() === 0"
-        >
+          [class.hidden]="cartCount() === 0">
         </p-badge>
       </div>
+      
+      <app-cart-dropdown #cartDropdown></app-cart-dropdown>
     </div>
   </div>
 </p-toolbar>
