@@ -160,3 +160,25 @@
     color: #ffa500;
     font-weight: bold;
   }
+
+  .product-actions {
+    margin-top: 1rem;
+    
+    .p-button {
+      width: 100%;
+      justify-content: center;
+      
+      .pi {
+        margin-right: 0.5rem;
+      }
+      
+      &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+    }
+  }
+
+  ::ng-deep .hidden .p-button {
+    display: none;
+  }

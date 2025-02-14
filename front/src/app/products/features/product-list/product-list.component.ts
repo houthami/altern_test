@@ -8,6 +8,7 @@ import { TagModule } from 'primeng/tag';
 import { DataViewModule } from 'primeng/dataview';
 import { DialogModule } from 'primeng/dialog';
 import { CommonModule } from "@angular/common";
+import { CartService } from "app/services/cart.service";
 
 const emptyProduct: Product = {
   id: 0,
@@ -42,6 +43,7 @@ export class ProductListComponent implements OnInit {
   public isCreation = false;
   public isDescriptionExpanded = false;
   public currency = "MAD";
+  private cartService = inject(CartService);
 
   public readonly editedProduct = signal<Product>(emptyProduct);
 
@@ -65,6 +67,23 @@ export class ProductListComponent implements OnInit {
     this.editedProduct.set(product);
   }
 
+  public getInventoryStatus(quantity: number): string {
+    if (quantity === 0) return 'OUTOFSTOCK';
+    if (quantity < 10) return 'LOWSTOCK';
+    return 'INSTOCK';
+  }
+
+  public getInventoryStatusClass(status: string): string {
+    switch(status.toUpperCase()) {
+      case 'LOWSTOCK':
+        return 'low-stock';
+      case 'OUTOFSTOCK':
+        return 'out-of-stock';
+      default:
+        return '';
+    }
+  }
+
   public getSeverity(category: string) {
     switch (category.toLowerCase()) {
       case 'accessories':
@@ -80,21 +99,26 @@ export class ProductListComponent implements OnInit {
     }
   }
 
-  public getStatusClass(status: string): string {
-    switch(status.toUpperCase()) {
-      case 'LOWSTOCK':
-        return 'low-stock';
-      case 'OUTOFSTOCK':
-        return 'out-of-stock';
-      default:
-        return '';
-    }
-  }
-
   public handleImageError(event: Event) {
     const img = event.target as HTMLImageElement;
     img.src = 'assets/img/default-product.jpg';
     img.onerror = null; 
+  }
+
+  public addToCart(product: Product) {
+    console.log("Adding to cart", product.quantity);
+    if (this.getInventoryStatus(product.quantity) !== 'OUTOFSTOCK') {
+      this.cartService.addToCart(product);
+      product.quantity -= 1;
+      this.productsService.update(product).subscribe();
+      this.animateCartIcon();
+    }
+  }
+  
+  private animateCartIcon() {
+    const cartIcon = document.querySelector('.pi-shopping-cart');
+    cartIcon?.classList.add('cart-bounce');
+    setTimeout(() => cartIcon?.classList.remove('cart-bounce'), 500);
   }
 
   public onDelete(product: Product) {

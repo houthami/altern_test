@@ -30,10 +30,10 @@
           <div class="product-title">
             <h3 class="product-name">{{ product.name }}</h3>
             <div
-              *ngIf="product.inventoryStatus !== 'INSTOCK'"
-              [class]="getStatusClass(product.inventoryStatus)"
+              *ngIf="getInventoryStatus(product.quantity) !== 'INSTOCK'"
+              [class]="getInventoryStatusClass(getInventoryStatus(product.quantity))"
             >
-              {{ product.inventoryStatus }}
+              {{ getInventoryStatus(product.quantity) }}
             </div>
           </div>
           <div class="product-description">{{ product.description }}</div>
@@ -52,6 +52,15 @@
 
         <ng-template pTemplate="footer">
           <div class="product-actions">
+            <p-button
+              icon="pi pi-shopping-cart"
+              label="Add to Cart"
+              (onClick)="addToCart(product)"
+              [disabled]="product.inventoryStatus === 'OUTOFSTOCK'"
+              styleClass="p-button-success"
+              [class.hidden]="product.quantity === 0"
+            >
+            </p-button>
             <p-button
               icon="pi pi-pencil"
               styleClass="p-button-rounded p-button-secondary p-button-text"
