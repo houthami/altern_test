@@ -118,7 +118,6 @@ export class ProductListComponent implements OnInit {
   }
 
   public addToCart(product: Product) {
-    console.log("Adding to cart", product.quantity);
     if (this.getInventoryStatus(product.quantity) !== 'OUTOFSTOCK') {
       this.cartService.addToCart(product);
       product.quantity -= 1;

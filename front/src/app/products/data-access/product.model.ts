@@ -7,6 +7,7 @@ export interface Product {
     category: string;
     price: number;
     quantity: number;
+    quantityRequest?: number;
     internalReference: string;
     shellId: number;
     inventoryStatus: "INSTOCK" | "LOWSTOCK" | "OUTOFSTOCK";

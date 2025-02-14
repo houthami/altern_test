@@ -1,0 +1,39 @@
+<div class="panier-page">
+    <h2>Your Panier</h2>
+    <div class="panier-items">
+      @for (item of cartItems(); track item.id) {
+        <div class="cart-item">
+            <img
+            [src]="item.image || 'assets/img/default-product.jpg'"
+            (error)="handleImageError($event)"
+            alt="{{ item.name }}"
+            class="item-image"
+          />
+          <div class="item-details">
+            <h3>{{ item.name }}</h3>
+            <p class="item-description">{{ item.description || 'No description available' }}</p>
+          </div>
+          <div class="item-controls">
+            <div class="quantity-price">
+              <input type="number" 
+                     min="1" 
+                     max="{{ item.quantity }}"
+                     [value]="item.quantityRequest" 
+                     (change)="cartService.updateQuantity(item.id, $any($event.target).value)"
+                     class="quantity-input">
+              <span class="item-total">{{ item.price * (item.quantityRequest || 1) | currency }}</span>
+            </div>
+            <button (click)="cartService.removeFromCart(item.id)" class="remove-btn">Remove</button>
+          </div>
+        </div>
+      } @empty {
+        <p>Your panier is empty.</p>
+      }
+    </div>
+    <div class="panier-total">
+      <p>Total: {{ cartTotal() | currency }}</p>
+    </div>
+    <div class="panier-actions">
+    <button routerLink="/products/list" class="continue-btn">Continue Shopping</button>
+    <button routerLink="/payer" class="continue-btn">Checkout</button></div>
+  </div>

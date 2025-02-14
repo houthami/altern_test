@@ -6,7 +6,7 @@
         <div class="flex justify-content-between align-items-center">
           <div>
             <div class="font-bold">{{ item.name }}</div>
-            <div>{{ item.quantity }} x {{ item.price | currency }}</div>
+            <div>{{ item.quantityRequest || 1  }} x {{ item.price | currency }}</div>
           </div>
           <button
             (click)="removeFromCart(item.id)"
@@ -29,7 +29,7 @@
     <div class="cart-actions p-3 border-top-1">
       <p-button
         label="Voir le panier"
-        (onClick)="toggle($event)"
+        (onClick)="viewPanier($event)"
         class="w-full"
         severity="info"
       ></p-button>

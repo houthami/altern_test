@@ -1,36 +1,49 @@
-import { Injectable, signal, computed } from '@angular/core';
-import { Product } from 'app/products/data-access/product.model';
+import { computed, Injectable, signal } from "@angular/core";
+import { Product } from "app/products/data-access/product.model";
 
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class CartService {
   private _cartItems = signal<Product[]>([]);
 
   cartItems = this._cartItems.asReadonly();
-  
-  cartCount = computed(() => 
-    this._cartItems().reduce((acc, item) => acc + (item.quantity || 1), 0)
+
+  cartCount = computed(() =>
+    this._cartItems().reduce((acc, item) => acc + (item.quantityRequest || 1), 0)
   );
 
   addToCart(product: Product, quantity: number = 1) {
-    const existingItem = this._cartItems().find(item => item.id === product.id);
-    
+    const existingItem = this._cartItems().find(
+      (item) => item.id === product.id
+    );
+
     if (existingItem) {
-      existingItem.quantity = (existingItem.quantity || 1) + quantity;
-      this._cartItems.update(items => [...items]);
+      existingItem.quantityRequest = (existingItem.quantityRequest || 1) + quantity;
+      this._cartItems.update((items) => [...items]);
     } else {
-      this._cartItems.update(items => [...items, { ...product, quantity }]);
+      this._cartItems.update((items) => [...items, { ...product, quantityRequest: quantity }]);
     }
   }
 
-  cartTotal = computed(() => 
-    this._cartItems().reduce((acc, item) => 
-      acc + (item.price * (item.quantity || 1)), 0
-  ));
+  cartTotal = computed(() =>
+    this._cartItems().reduce(
+      (acc, item) => acc + item.price * (item.quantityRequest || 1),
+      0
+    )
+  );
 
   removeFromCart(productId: number) {
-    this._cartItems.update(items => 
-      items.filter(item => item.id !== productId)
+    this._cartItems.update((items) =>
+      items.filter((item) => item.id !== productId)
     );
+  }
+
+  public updateQuantity(itemId: number, newQuantity: number) {
+    const items = this.cartItems();
+    const item = items.find((i) => i.id === itemId);
+    if (item) {
+      item.quantityRequest = Math.max(1, newQuantity);
+      //this.cartItems.set(items);
+    }
   }
 
   clearCart() {
