@@ -1,14 +1,22 @@
 <div class="page-header">
-  <h1 class="text-center">Liste des produits</h1>
+  <h1>Liste des produits</h1>
 
-  <p-button
-    label="Créer produit"
-    (onClick)="onCreate()"
-    class="block text-center"
-  />
+  <div class="header-actions">
+    <span class="p-input-icon-left">
+      <i class="pi pi-search"></i>
+      <input
+        type="text"
+        pInputText
+        placeholder="Rechercher..."
+        [ngModel]="searchTerm()"
+        (ngModelChange)="onSearch($event)"
+      />
+    </span>
+    <p-button label="Créer produit" (onClick)="onCreate()" />
+  </div>
 </div>
 
-<p-dataView #dv [value]="products()">
+<p-dataView #dv [value]="allProducts()">
   <ng-template pTemplate="list" let-products>
     <div class="product-grid" #gridContainer>
       @for (product of products; track product) {
@@ -80,6 +88,10 @@
     </div>
   </ng-template>
 </p-dataView>
+
+<div class="loading-indicator" *ngIf="isLoading()">
+  <i class="pi pi-spinner pi-spin"></i> Loading more products...
+</div>
 
 <p-dialog
   [(visible)]="isDialogVisible"

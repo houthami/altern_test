@@ -1,10 +1,40 @@
-/* Product Grid */
 .page-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-left: 2rem;
-  padding-right: 2rem;
+  padding: 1rem 2rem;
+  gap: 1rem;
+
+  h1 {
+    margin: 0;
+    font-size: 1.5rem;
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    .search-input {
+      width: 200px;
+    }
+  }
+  .p-input-icon-left {
+    .pi-search {
+      color: #6b7280;
+    }
+    
+    input {
+      width: 250px;
+      padding-left: 2rem;
+      transition: all 0.3s ease;
+      
+      &:focus {
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 1px #3b82f6;
+      }
+    }
+  }
 }
 
 .product-grid {
@@ -23,6 +53,7 @@
   transition: all 0.3s ease;
   border: 1px solid #e5e7eb;
   border-radius: 12px;
+  max-width: 300px;
   overflow: hidden;
 }
 
@@ -185,4 +216,15 @@
 
 ::ng-deep .hidden .p-button {
   display: none;
+}
+
+.loading-indicator {
+  text-align: center;
+  padding: 1rem;
+  color: #3b82f6;
+  font-size: 0.875rem;
+  
+  .pi-spinner {
+    margin-right: 0.5rem;
+  }
 }
