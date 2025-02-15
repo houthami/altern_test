@@ -37,6 +37,20 @@ export class CartService {
     );
   }
 
+  public decrement(item: Product) {
+    if(!item || !item.quantityRequest) return
+    if(item.quantityRequest === 1) return
+    if (item.quantityRequest > 1) {
+      item.quantityRequest--;
+    }
+  }
+
+  public increment(item: Product) {
+    if(!item || !item.quantityRequest) return
+    if(item.quantityRequest === item.quantity) return
+    item.quantityRequest++;
+  }
+
   public updateQuantity(itemId: number, newQuantity: number) {
     const items = this.cartItems();
     const item = items.find((i) => i.id === itemId);

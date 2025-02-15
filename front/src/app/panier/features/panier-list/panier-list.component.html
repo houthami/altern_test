@@ -1,39 +1,73 @@
 <div class="panier-page">
-    <h2>Your Panier</h2>
+    <h2 class="page-title">Your Shopping Cart</h2>
+    
     <div class="panier-items">
       @for (item of cartItems(); track item.id) {
         <div class="cart-item">
-            <img
-            [src]="item.image || 'assets/img/default-product.jpg'"
-            (error)="handleImageError($event)"
-            alt="{{ item.name }}"
-            class="item-image"
-          />
-          <div class="item-details">
-            <h3>{{ item.name }}</h3>
-            <p class="item-description">{{ item.description || 'No description available' }}</p>
-          </div>
-          <div class="item-controls">
-            <div class="quantity-price">
-              <input type="number" 
-                     min="1" 
-                     max="{{ item.quantity }}"
-                     [value]="item.quantityRequest" 
-                     (change)="cartService.updateQuantity(item.id, $any($event.target).value)"
-                     class="quantity-input">
-              <span class="item-total">{{ item.price * (item.quantityRequest || 1) | currency }}</span>
+            <div class="item-image-container">
+                <img
+                    [src]="item.image || 'assets/img/default-product.jpg'"
+                    (error)="handleImageError($event)"
+                    alt="{{ item.name }}"
+                    class="item-image"
+                />
             </div>
-            <button (click)="cartService.removeFromCart(item.id)" class="remove-btn">Remove</button>
-          </div>
+          
+            <div class="item-details">
+                <h3 class="item-name">{{ item.name }}</h3>
+                <p class="item-description">{{ item.description || 'No description available' }}</p>
+                <p class="unit-price">{{ item.price | currency }} each</p>
+            </div>
+
+            <div class="item-controls">
+                <div class="quantity-control">
+                    <button class="quantity-btn" (click)="cartService.decrement(item)">−</button>
+                    <input type="number" 
+                        min="1" 
+                        max="{{ item.quantity }}"
+                        [value]="item.quantityRequest"
+                        (change)="cartService.updateQuantity(item.id, $any($event.target).value)"
+                        class="quantity-input">
+                    <button class="quantity-btn" (click)="cartService.increment(item)">+</button>
+                </div>
+                
+                <div class="price-remove">
+                    <span class="item-total">{{ item.price * (item.quantityRequest || 1) | currency }}</span>
+                    <button (click)="cartService.removeFromCart(item.id)" class="remove-btn">
+                        <svg class="trash-icon" viewBox="0 0 24 24">
+                            <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
         </div>
       } @empty {
-        <p>Your panier is empty.</p>
+        <div class="empty-cart">
+            <svg class="cart-icon" viewBox="0 0 24 24">
+                <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
+            </svg>
+            <p>Your cart feels lonely!</p>
+            <p>Start adding items from our collection</p>
+        </div>
       }
     </div>
-    <div class="panier-total">
-      <p>Total: {{ cartTotal() | currency }}</p>
+
+    <div class="summary-section">
+        <div class="total-container">
+            <div class="total-line">
+                <span>Subtotal</span>
+                <span>{{ cartTotal() | currency }}</span>
+            </div>
+            <p class="shipping-note">Shipping & taxes calculated at checkout</p>
+        </div>
+
+        <div class="action-buttons">
+            <button routerLink="/products/list" class="btn secondary">
+                ← Continue Shopping
+            </button>
+            <button routerLink="/payer" class="btn primary">
+                Checkout →
+            </button>
+        </div>
     </div>
-    <div class="panier-actions">
-    <button routerLink="/products/list" class="continue-btn">Continue Shopping</button>
-    <button routerLink="/payer" class="continue-btn">Checkout</button></div>
-  </div>
+</div>
