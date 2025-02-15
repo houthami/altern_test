@@ -16,5 +16,10 @@ export const APP_ROUTES: Routes = [
     loadChildren: () =>
       import("./panier/paniers.routes").then((m) => m.PANIERS_ROUTES)
   },
+  {
+    path: "contact",
+    loadChildren: () =>
+      import("./contact/contact.routes").then((m) => m.CONTACT_ROUT)
+  },
   { path: "", redirectTo: "home", pathMatch: "full" },
 ];
