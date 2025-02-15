@@ -1,0 +1,4 @@
+package com.altern.test.config;
+
+public class OpenApiConfig {
+}
