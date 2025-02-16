@@ -1,0 +1,7 @@
+package com.altern.test.repository;
+
+import com.altern.test.entity.Cart;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface CartRepository extends JpaRepository<Cart, Long> {
+}

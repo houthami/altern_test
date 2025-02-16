@@ -1,0 +1,4 @@
+package com.altern.test.entity;
+
+public class Cart {
+}

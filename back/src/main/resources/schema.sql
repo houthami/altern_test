@@ -25,3 +25,24 @@ CREATE TABLE MP_USER (
       created_at TIMESTAMP,
       updated_at TIMESTAMP
 );
+
+-- Nouvelle table CART
+CREATE TABLE CART (
+                      id BIGINT PRIMARY KEY AUTO_INCREMENT,
+                      user_id BIGINT UNIQUE,
+                      FOREIGN KEY (user_id) REFERENCES MP_USER(id) ON DELETE CASCADE
+);
+
+-- Nouvelle table CART_ITEM
+CREATE TABLE CART_ITEM (
+                           id BIGINT PRIMARY KEY AUTO_INCREMENT,
+                           cart_id BIGINT,
+                           product_id BIGINT,
+                           quantity INT NOT NULL CHECK (quantity > 0),
+                           FOREIGN KEY (cart_id) REFERENCES CART(id) ON DELETE CASCADE,
+                           FOREIGN KEY (product_id) REFERENCES PRODUCT(id) ON DELETE CASCADE
+);
+
+-- Index pour optimiser les jointures
+CREATE INDEX idx_cart_item_cart ON CART_ITEM(cart_id);
+CREATE INDEX idx_cart_item_product ON CART_ITEM(product_id);

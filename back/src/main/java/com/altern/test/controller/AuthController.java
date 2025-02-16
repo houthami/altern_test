@@ -9,6 +9,7 @@ import com.altern.test.util.JwtUtil;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,40 +21,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class AuthController {
-
-    @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
-    private JwtUtil jwtUtil;
-
-    @Autowired
-    private UserDetailsService userDetailsService;
-
     @Autowired
     private IUserService userService;
 
     @PostMapping("/token")
-    public ResponseEntity<?> generateToken(@RequestBody AuthRequest authRequest) throws Exception {
-        try {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(authRequest.email(), authRequest.password())
-            );
-        } catch (BadCredentialsException e) {
-            throw new Exception("Invalid credentials", e);
-        }
-
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(authRequest.email());
-        final String jwt = jwtUtil.generateToken(userDetails);
+    public ResponseEntity<?> generateToken(@RequestBody AuthRequest authRequest) {
+        String jwt = userService.generateToken(authRequest);
         return ResponseEntity.ok(new AuthResponse(jwt));
     }
 
-    @PostMapping("/register")
+    @PostMapping("/account")
+    @PreAuthorize("authentication.name == 'admin@admin.com'")
     public ResponseEntity<?> register(@Valid  @RequestBody UserRequest user) {
         return ResponseEntity.ok(userService.createUser(user));
     }
-    /*@PostMapping("/account")
-    public ResponseEntity<?> createAccount(@RequestBody User user) {
-        // Création utilisateur avec mot de passe hashé
-    }*/
 }
