@@ -14,3 +14,14 @@ CREATE TABLE PRODUCT (
                          created_at TIMESTAMP,
                          updated_at TIMESTAMP
 );
+
+CREATE TABLE MP_USER (
+      id BIGINT AUTO_INCREMENT PRIMARY KEY,
+      username VARCHAR(255),
+      firstname VARCHAR(255),
+      email VARCHAR(255),
+      role VARCHAR(255),
+      password VARCHAR(255),
+      created_at TIMESTAMP,
+      updated_at TIMESTAMP
+);
